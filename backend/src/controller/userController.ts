@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { User } from "../model/User";
-import { validationError } from "./../utils/validationError";
+import { errorHandler } from "../utils/errorHandler";
 
 export const getAllUsers = async (req: Request, resp: Response) => {
   try {
@@ -11,7 +11,7 @@ export const getAllUsers = async (req: Request, resp: Response) => {
       data: users,
     });
   } catch (ex) {
-    const errors = validationError(ex);
+    const errors = errorHandler(ex);
     const status = errors ? 400 : 500;
 
     resp.status(status).json({
@@ -42,7 +42,7 @@ export const getUserById = async (req: Request, resp: Response) => {
       data: user,
     });
   } catch (ex) {
-    const errors = validationError(ex);
+    const errors = errorHandler(ex);
     const status = errors ? 400 : 500;
 
     resp.status(status).json({
@@ -62,7 +62,7 @@ export const createUser = async (req: Request, resp: Response) => {
       data: user,
     });
   } catch (ex) {
-    const errors = validationError(ex);
+    const errors = errorHandler(ex);
     const status = errors ? 400 : 500;
 
     resp.status(status).json({
@@ -93,7 +93,7 @@ export const deleteUserById = async (req: Request, resp: Response) => {
       status: 200,
     });
   } catch (ex) {
-    const errors = validationError(ex);
+    const errors = errorHandler(ex);
     const status = errors ? 400 : 500;
 
     resp.status(status).json({
