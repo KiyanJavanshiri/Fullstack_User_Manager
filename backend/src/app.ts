@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { errorHandler } from "./utils/errorHandler";
 import usersRouter from "./router/user";
 
 dotenv.config();
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);
+app.use(errorHandler);
 
 const PORT = process.env.APP_URL || 3000;
 

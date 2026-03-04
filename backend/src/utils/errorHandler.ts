@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
+import type { Request, Response, NextFunction } from "express";
 
-export const errorHandler = (
-  error: unknown,
-): Record<string, string> | null => {
+const errorValidator = (error: unknown): Record<string, string> | null => {
   const errors: Record<string, string> = {};
   if (error instanceof mongoose.Error.ValidationError) {
     Object.values(error.errors).forEach((err) => {
@@ -17,4 +16,21 @@ export const errorHandler = (
   }
 
   return null;
+};
+
+export const errorHandler = (
+  error: unknown,
+  req: Request,
+  resp: Response,
+  next: NextFunction,
+) => {
+  const errors = errorValidator(error);
+
+  const status = errors ? 400 : 500;
+
+  resp.status(status).json({
+    success: false,
+    status,
+    error: errors ?? "server error",
+  });
 };
