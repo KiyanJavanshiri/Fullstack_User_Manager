@@ -18,3 +18,50 @@ export const getAllUsers = async (req: Request, resp: Response) => {
     });
   }
 };
+
+export const getUserById = async (req: Request, resp: Response) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id);
+
+    if (!user) {
+      resp.status(404).json({
+        success: false,
+        status: 404,
+        data: null,
+      });
+      return;
+    }
+
+    resp.status(200).json({
+      success: true,
+      status: 200,
+      data: user,
+    });
+  } catch (ex) {
+    console.error(ex);
+    resp.status(500).json({
+      success: false,
+      status: 500,
+      error: ex,
+    });
+  }
+};
+
+export const createUser = async (req: Request, resp: Response) => {
+  try {
+    const user = await User.create(req.body);
+    resp.status(201).json({
+      success: true,
+      status: 201,
+      data: user,
+    });
+  } catch (ex) {
+    console.error(ex);
+    resp.status(500).json({
+      success: false,
+      status: 500,
+      error: ex,
+    });
+  }
+};
