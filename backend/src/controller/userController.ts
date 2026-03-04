@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { User } from "../model/User";
+import { validationError } from "./../utils/validationError";
 
 export const getAllUsers = async (req: Request, resp: Response) => {
   try {
@@ -10,11 +11,13 @@ export const getAllUsers = async (req: Request, resp: Response) => {
       data: users,
     });
   } catch (ex) {
-    console.error(ex);
-    resp.status(500).json({
+    const errors = validationError(ex);
+    const status = errors ? 400 : 500;
+
+    resp.status(status).json({
       success: false,
-      status: 500,
-      error: ex,
+      status,
+      error: errors ?? "server error",
     });
   }
 };
@@ -28,7 +31,7 @@ export const getUserById = async (req: Request, resp: Response) => {
       resp.status(404).json({
         success: false,
         status: 404,
-        data: null,
+        message: `user with id ${id} was not found`,
       });
       return;
     }
@@ -39,11 +42,13 @@ export const getUserById = async (req: Request, resp: Response) => {
       data: user,
     });
   } catch (ex) {
-    console.error(ex);
-    resp.status(500).json({
+    const errors = validationError(ex);
+    const status = errors ? 400 : 500;
+
+    resp.status(status).json({
       success: false,
-      status: 500,
-      error: ex,
+      status,
+      error: errors ?? "server error",
     });
   }
 };
@@ -57,11 +62,44 @@ export const createUser = async (req: Request, resp: Response) => {
       data: user,
     });
   } catch (ex) {
-    console.error(ex);
-    resp.status(500).json({
+    const errors = validationError(ex);
+    const status = errors ? 400 : 500;
+
+    resp.status(status).json({
       success: false,
-      status: 500,
-      error: ex,
+      status,
+      error: errors ?? "server error",
+    });
+  }
+};
+
+export const deleteUserById = async (req: Request, resp: Response) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      resp.status(404).json({
+        success: false,
+        status: 404,
+        message: `user with id ${id} was not found`,
+      });
+
+      return;
+    }
+
+    resp.status(200).json({
+      success: true,
+      status: 200,
+    });
+  } catch (ex) {
+    const errors = validationError(ex);
+    const status = errors ? 400 : 500;
+
+    resp.status(status).json({
+      success: false,
+      status,
+      error: errors ?? "server error",
     });
   }
 };

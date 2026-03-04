@@ -3,11 +3,11 @@ import {
   getAllUsers,
   getUserById,
   createUser,
+  deleteUserById
 } from "../controller/userController";
 const router = express.Router();
 
-router.get("/", getAllUsers);
-router.get("/:id", getUserById);
-router.post("/", createUser);
+router.route("/").get(getAllUsers).post(createUser);
+router.route("/:id").get(getUserById).delete(deleteUserById);
 
 export default router;

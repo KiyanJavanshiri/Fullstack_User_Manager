@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       enum: {
         values: ["user", "admin"],
         message:
-          '{VALUE} is not correct role! choose between "user" or "admin"',
+          '{VALUE} is not correct role! choose between user or admin',
         default: "user",
       },
       required: true,
