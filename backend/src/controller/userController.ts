@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { User } from "../model/User";
-import { errorHandler } from "../utils/errorHandler";
 
 export const getAllUsers = asyncHandler(
   async (req: Request, resp: Response) => {
@@ -42,6 +41,28 @@ export const createUser = asyncHandler(async (req: Request, resp: Response) => {
     success: true,
     status: 201,
     data: user,
+  });
+});
+
+export const updateUser = asyncHandler(async (req: Request, resp: Response) => {
+  const id = req.params.id;
+  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    returnDocument: "after", runValidators: true
+  });
+
+  if (!updatedUser) {
+    resp.status(404).json({
+      success: false,
+      status: 404,
+      message: `user with id ${id} was not found`,
+    });
+    return;
+  }
+
+  resp.status(200).json({
+    success: true,
+    status: 200,
+    data: updatedUser,
   });
 });
 
