@@ -5,6 +5,7 @@ const RootRouter = () => {
   return (
     <Routes>
       <Route index element={<UsersTable />} />
+      <Route path="*" element={<p>pon</p>} />
     </Routes>
   );
 };

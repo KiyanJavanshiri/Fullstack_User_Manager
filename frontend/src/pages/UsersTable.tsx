@@ -1,4 +1,5 @@
 import { useGetUsersQuery } from "@/store/api/userApi";
+import Title from "@/components/Title";
 
 const UsersTable = () => {
   const { data: users, isLoading, isSuccess } = useGetUsersQuery();
@@ -9,11 +10,14 @@ const UsersTable = () => {
 
   return (
     isSuccess && (
-      <div className="">
-        {users.map((user) => (
-          <p key={user._id}>{user.firstName}</p>
-        ))}
-      </div>
+      <section>
+        <Title title="Users" />
+        <div className="">
+          {users.map((user) => (
+            <p key={user._id}>{user.firstName}</p>
+          ))}
+        </div>
+      </section>
     )
   );
 };

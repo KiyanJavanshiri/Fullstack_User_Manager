@@ -14,3 +14,8 @@ export type TApiResponse<T> = {
   status: number;
   data: T;
 };
+
+export type TPath = {
+  title: string;
+  path: string;
+};

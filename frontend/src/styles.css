@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  --leading-normal: 143%;
+  --font-inter: "Inter", "sans-serif";
+}
+
+@layer base {
+  body {
+    @apply font-inter;
+  }
+}
