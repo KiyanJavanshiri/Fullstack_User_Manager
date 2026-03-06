@@ -1,10 +1,13 @@
-import React from "react";
+import RootRouter from "./routes";
+import Container from "./layout/Container";
 import "./styles.css";
 
 function App() {
   return (
     <>
-      <h1 className="text-red-500">Hello world</h1>
+      <Container>
+        <RootRouter />
+      </Container>
     </>
   );
 }
