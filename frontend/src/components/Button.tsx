@@ -5,16 +5,18 @@ type TButtonProps = {
   className?: string;
   onClick?: () => void;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  disabled?: boolean
 };
 
 const Button = (props: TButtonProps) => {
-  const { children, className = "", onClick, type = "button" } = props;
+  const { children, className = "", onClick, type = "button", disabled } = props;
 
   return (
     <button
       className={`cursor-pointer ${className}`}
       type={type}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
