@@ -1,5 +1,6 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
+import {useCreateUserMutation} from "@/store/api/userApi"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "@/utils/validationSchemas";
 import FormInput from "@/components/FormInput";
@@ -9,9 +10,11 @@ import Button from "@/components/Button";
 type TCreateUserForm = z.infer<typeof userSchema>;
 
 const CreateUser = () => {
+  const [createUser] = useCreateUserMutation();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<TCreateUserForm>({
     defaultValues: {
@@ -20,8 +23,13 @@ const CreateUser = () => {
     resolver: zodResolver(userSchema),
   });
 
-  const onSubmit: SubmitHandler<TCreateUserForm> = (data) => {
-    console.log("data: ", data);
+  const onSubmit: SubmitHandler<TCreateUserForm> = async (data) => {
+    try {
+      await createUser({...data, age: +data.age});
+      reset();
+    } catch(ex) {
+      console.error(ex);
+    }
   };
 
   console.log(errors)

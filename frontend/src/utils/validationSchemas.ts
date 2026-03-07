@@ -31,8 +31,7 @@ export const userSchema = z.object({
       }
     },
     })
-    .regex(/^(?:1[01][0-9]|120|[1-9]?[0-9])$/, "Age must be between 0 and 120")
-    .transform((val) => Number(val)),
+    .regex(/^(?:1[01][0-9]|120|[1-9]?[0-9])$/, "Age must be between 0 and 120"),
   email: z.email({
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     error: (issue) => {

@@ -7,12 +7,14 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${API_URL}/api/users`,
   }),
+  tagTypes: ["CREATE", "DELETE"],
   endpoints: (builder) => ({
     getUsers: builder.query<TUser[], void>({
       query: () => "/",
       transformResponse: (resp: TApiResponse<TUser[]>) => {
         return resp.data;
       },
+      providesTags: ["CREATE", "DELETE"],
     }),
     getUser: builder.query<TUser, { id: string }>({
       query: ({ id }) => `/${id}`,
@@ -20,7 +22,21 @@ export const userApi = createApi({
         return resp.data;
       },
     }),
+    createUser: builder.mutation<
+      boolean,
+      Omit<TUser, "createdAt" | "updatedAt" | "_id">
+    >({
+      query: (body) => ({
+        url: "/",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (resp: TApiResponse<TUser>) => {
+        return resp.success;
+      },
+      invalidatesTags: ["CREATE"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery } = userApi;
+export const { useGetUsersQuery, useCreateUserMutation } = userApi;
