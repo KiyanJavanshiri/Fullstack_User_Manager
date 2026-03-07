@@ -1,4 +1,5 @@
-import { useGetUsersQuery } from "@/store/api/userApi";
+import { useGetUsersQuery, useDeleteUserMutation } from "@/store/api/userApi";
+import { Link } from "react-router";
 import Title from "@/components/Title";
 import Button from "@/components/Button";
 import EditIcon from "@/assets/edit.svg?react";
@@ -8,6 +9,7 @@ const TABLE_COLUMNS = ["Name", "Email", "Age", "Role", "Actions"];
 
 const UsersTable = () => {
   const { data: users, isLoading, isSuccess } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
 
   return (
     isSuccess && (
@@ -45,10 +47,18 @@ const UsersTable = () => {
                   <td className="px-4 py-2">{user.age}</td>
                   <td className="px-4 py-2">{user.role}</td>
                   <td className="px-4 py-2 rounded-r-lg">
-                    <Button className="mr-4">
+                    <Link to={`/edit/${user._id}`} className="inline-block mr-4">
                       <EditIcon className="stroke-blue-400 w-4 h-4" />
-                    </Button>
-                    <Button>
+                    </Link>
+                    <Button
+                      onClick={async () => {
+                        try {
+                          await deleteUser(user._id);
+                        } catch (ex) {
+                          console.error(ex);
+                        }
+                      }}
+                    >
                       <DeleteIcon className="stroke-red-500 w-4 h-4" />
                     </Button>
                   </td>
